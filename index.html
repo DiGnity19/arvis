@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARVIS Login System</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 5px;
+    }
+    input {
+      background-color: #2e2e2e;
+      color: white;
+    }
+    button {
+      background-color: #ffb300;
+      color: black;
+      cursor: pointer;
+    }
+    .dashboard {
+      display: none;
+    }
+    .comment-box {
+      background-color: #2e2e2e;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="loginContainer">
+    <h2>Login to ARVIS</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>  <div class="container dashboard" id="masterDashboard">
+    <h2>Master Dashboard</h2>
+    <p>Welcome, Master!</p>
+    <button onclick="logout()">Logout</button>
+    <h3>Active Partners</h3>
+    <ul id="partnerList"></ul>
+    <h3>Upload Konten</h3>
+    <input type="file">
+    <textarea rows="4" placeholder="Tulis teks di sini..." style="width: 100%;"></textarea>
+    <button>Upload</button>
+  </div>  <div class="container dashboard" id="partnerDashboard">
+    <h2>Partner Dashboard</h2>
+    <p>Welcome, Partner!</p>
+    <button onclick="logout()">Logout</button>
+    <div class="comment-box">
+      <textarea rows="4" placeholder="Tulis komentar..." style="width: 100%;"></textarea>
+      <button>Kirim Komentar</button>
+    </div>
+  </div>  <script>
+    const users = {
+      master: { password: 'arya3454', role: 'master' },
+      partner1: { password: '1partner', role: 'partner' },
+      partner2: { password: '2partner', role: 'partner' },
+      partner3: { password: '3partner', role: 'partner' },
+    };
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (users[username] && users[username].password === password) {
+        if (users[username].role === 'master') {
+          document.getElementById('loginContainer').style.display = 'none';
+          document.getElementById('masterDashboard').style.display = 'block';
+          showPartners();
+        } else {
+          document.getElementById('loginContainer').style.display = 'none';
+          document.getElementById('partnerDashboard').style.display = 'block';
+        }
+      } else {
+        alert('Login gagal!');
+      }
+    }
+
+    function logout() {
+      document.getElementById('loginContainer').style.display = 'block';
+      document.getElementById('masterDashboard').style.display = 'none';
+      document.getElementById('partnerDashboard').style.display = 'none';
+    }
+
+    function showPartners() {
+      const list = document.getElementById('partnerList');
+      list.innerHTML = '';
+      Object.entries(users).forEach(([user, data]) => {
+        if (data.role === 'partner') {
+          const li = document.createElement('li');
+          li.textContent = user;
+          const btn = document.createElement('button');
+          btn.textContent = 'Kick';
+          btn.onclick = () => {
+            alert(user + ' telah dikeluarkan.');
+          };
+          li.appendChild(btn);
+          list.appendChild(li);
+        }
+      });
+    }
+  </script></body>
+</html>
